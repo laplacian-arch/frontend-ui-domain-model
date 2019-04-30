@@ -1,0 +1,78 @@
+entities:
+  - name: feature
+    namespace: laplacian_arch.client_app_arch
+    description: |
+      A feature of this application client.
+
+    properties:
+      - name: name
+        type: string
+
+      - name: identifier
+        type: string
+        optional: true
+        default_value: |
+          name.lowerUnderscorize()
+
+      - name: base_path
+        type: string
+        optional: true
+        default_value: |
+          identifier
+
+      - name: initial
+        description: |
+          Whether this feature is the entry point of this application.
+        type: boolean
+        optional: true
+        default_value: |
+          false
+
+    relationships:
+      - name: pages
+        description: |
+          The list of pages the feature contains.
+        reference_entity_name: page
+        cardinality: '*'
+        mappings:
+          - from: name
+            to: feature_name
+
+      - name: state
+        description: |
+          The data structure of the client side application state concerning thie feature.
+        reference_entity_name: view_model_item
+        cardinality: '*'
+        aggregate: true
+
+      - name: state_queries
+        description: |
+          The queries to the client side application state.
+        reference_entity_name: view_model_operation
+        cardinality: '*'
+        aggregate: true
+
+      - name: state_mutation
+        description: |
+          The list of functions which mutate the current client side application state.
+        reference_entity_name: view_model_operation
+        cardinality: '*'
+        aggregate: true
+
+      - name: relating_entities
+        description: |
+          The list of entities this feature refers to
+        reference_entity_name: entity
+        cardinality: '*'
+        snippet: |
+          (state.map{ it.entity } + stateQueries.map{ it.entity })
+          .filterNotNull()
+          .distinctBy{ it.fqn }
+
+
+    queries:
+      - name: relating_entities
+        cardinality: '*'
+        result_entity_name: entity
+        snippet: |
+          flatMap{ it.relatingEntities }.distinctBy{ it.fqn }

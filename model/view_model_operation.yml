@@ -1,0 +1,48 @@
+entities:
+  - name: view_model_operation
+    namespace: laplacian_arch.client_app_arch
+
+    properties:
+      - name: name
+        type: string
+
+      - name: description
+        type: string
+        optional: true
+
+      - name: return_type
+        type: string
+        optional: true
+        default_value: |
+          entity?.let{ it.className + if (multiple) "[]" else "" }
+
+      - name: multiple
+        type: boolean
+        optional: true
+        default_value: |
+          false
+
+      - name: return_entity_name
+        type: string
+        optional: true
+
+      - name: snippet
+        type: string
+
+    relationships:
+      - name: feature
+        reference_entity_name: feature
+        cardinality: '1'
+        inherited: true
+
+      - name: params
+        reference_entity_name: named_param
+        cardinality: '*'
+        aggregate: true
+
+      - name: entity
+        reference_entity_name: entity
+        cardinality: '0..1'
+        mappings:
+          - from: return_entity_name
+            to: name

@@ -1,0 +1,72 @@
+entities:
+  - name: page_action
+    namespace: laplacian_arch.client_app_arch
+    description: |
+      An page action is the handler which is called when a certain event happens in this page.
+
+    properties:
+      - name: name
+        type: string
+
+      - name: identifier
+        type: string
+        optional: true
+        default_value:
+          name.lowerHyphenize()
+
+      - name: description
+        type: string
+        optional: true
+        default_value: |
+          "The ${name} action in ${page.name}"
+
+    relationships:
+      - name: page
+        reference_entity_name: page
+        inherited: true
+        cardinality: '1'
+
+      - name: params
+        reference_entity_name: named_param
+        aggregate: true
+        cardinality: '*'
+
+      - name: rest_api_call
+        reference_entity_name: rest_api_call
+        cardinality: '0..1'
+        aggregate: true
+
+      - name: graphql_query_call
+        reference_entity_name: graphql_query_call
+        cardinality: '0..1'
+        aggregate: true
+
+      - name: examples
+        reference_entity_name: page_action_example
+        aggregate: true
+        cardinality: '*'
+
+  - name: page_action_example
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: title
+        type: string
+
+      - name: given_params
+        type: string
+        optional: true
+
+      - name: given_state
+        type: string
+        optional: true
+
+      - name: then
+        type: string
+
+    relationships:
+      - name: action
+        reference_entity_name: page_action
+        cardinality: '1'
+        inherited: true
+
+

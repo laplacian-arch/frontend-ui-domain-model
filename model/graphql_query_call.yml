@@ -1,0 +1,28 @@
+entities:
+  - name: graphql_query_call
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: service_name
+        type: string
+
+      - name: name
+        type: string
+
+    relationships:
+      - name: action
+        cardinality: '1'
+        reference_entity_name: page_action
+        inherited: true
+
+      - name: service
+        cardinality: '1'
+        reference_entity_name: service
+        mappings:
+          - from: service_name
+            to: name
+
+      - name: graphql_query
+        cardinality: '1'
+        reference_entity_name: graphql_query
+        snippet: |
+          service.graphqlQueries.find{ it.name == name }!!

@@ -1,0 +1,67 @@
+entities:
+  - name: view_model_item
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: name
+        type: string
+
+      - name: identifier
+        type: string
+        optional: true
+        default_value: |
+          name.lowerUnderscorize()
+
+      - name: description
+        type: string
+        optional: true
+        default_value: |
+          name
+
+      - name: multiple
+        description: define wether this item has multiple values or not
+        type: boolean
+        optional: true
+        default_value: |
+          false
+
+      - name: entity_name
+        description: |
+          The name of the entity which is used as the type of this item. (This property can not be used with the type property.)
+        type: string
+        optional: true
+
+      - name: type
+        type: string
+        optional: true
+        default_value: |
+          entity?.let{ it.className + if (multiple) "[]" else "" }
+
+      - name: default_value
+        type: string
+        optional: true
+
+    relationships:
+      - name: entity
+        description: |
+          The entity which is used as the type of this item. (This can be null if this item has a simple-type.)
+        cardinality: '0..1'
+        reference_entity_name: entity
+        mappings:
+          - from: entity_name
+            to: name
+
+      - name: feature
+        cardinality: '0..1'
+        reference_entity_name: feature
+        inherited: true
+
+      - name: children
+        aggregate: true
+        cardinality: '*'
+        reference_entity_name: view_model_item
+
+      - name: parent
+        inherited: true
+        cardinality: '0..1'
+        reference_entity_name: view_model_item
+

@@ -1,0 +1,30 @@
+entities:
+  - name: widget
+    description: A widget represents a type of a visible UI component.
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: group
+        type: string
+
+      - name: name
+        type: string
+
+      - name: template
+        description: |
+          The template string which defines appearance of this widget.
+        type: string
+
+    relationships:
+      - name: params
+        description: |
+          The configurable parameters with whtch the appearance and behavior of this widget can be changed.
+        aggregate: true
+        cardinality: '*'
+        reference_entity_name: named_param
+
+      - name: events
+        description: |
+          The events which can be used to hook certain actions.
+        aggregate: true
+        cardinality: '*'
+        reference_entity_name: named_param

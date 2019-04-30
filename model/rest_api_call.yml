@@ -1,0 +1,48 @@
+entities:
+  - name: rest_api_call
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: service_name
+        type: string
+
+      - name: resource_name
+        type: string
+
+      - name: http_method
+        type: string
+        domain_type_name: http_method_for_rest
+
+      - name: path
+        type: string
+        optional: true
+        default_value: |
+          "/"
+
+    relationships:
+      - name: action
+        cardinality: '1'
+        reference_entity_name: page_action
+        inherited: true
+
+      - name: service
+        cardinality: '1'
+        reference_entity_name: service
+        mappings:
+          - from: service_name
+            to: name
+
+      - name: resource
+        cardinality: '1'
+        reference_entity_name: rest_resource
+        snippet: |
+          service.resources.find{ it.name == resourceName }!!
+
+      - name: operation
+        cardinality: '1'
+        reference_entity_name: rest_operation
+        snippet: |
+          resource.operations.find {
+              it.method == httpMethod &&
+              it.path == path
+          }!!
+

@@ -1,0 +1,77 @@
+entities:
+  - name: client
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: name
+        type: string
+
+      - name: identifier
+        type: string
+        domain_type_name: identifier
+        optional: true
+        default_value: |
+          name.lowerUnderscorize()
+
+      - name: version
+        type: string
+
+    relationships:
+      - name: client_features
+        cardinality: '*'
+        reference_entity_name: client_feature
+        aggregate: true
+
+      - name: features
+        cardinality: '*'
+        reference_entity_name: feature
+        snippet: |
+          clientFeatures.map{ it.feature }
+
+      - name: service_dependencies
+        cardinality: '*'
+        reference_entity_name: service_dependency
+        aggregate: true
+
+      - name: services
+        cardinality: '*'
+        reference_entity_name: service
+        snippet: |
+          serviceDependencies.map{ it.service }
+
+  - name: client_feature
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: feature_name
+        type: string
+
+    relationships:
+      - name: client
+        cardinality: '1'
+        reference_entity_name: client
+        inherited: true
+
+      - name: feature
+        cardinality: '1'
+        reference_entity_name: feature
+        mappings:
+          - from: feature_name
+            to: name
+
+  - name: service_dependency
+    namespace: laplacian_arch.client_app_arch
+    properties:
+      - name: service_name
+        type: string
+
+    relationships:
+      - name: client
+        cardinality: '1'
+        reference_entity_name: client
+        inherited: true
+
+      - name: service
+        cardinality: '1'
+        reference_entity_name: service
+        mappings:
+          - from: service_name
+            to: name

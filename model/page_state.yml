@@ -1,0 +1,19 @@
+entities:
+  - name: page_state
+    namespace: laplacian_arch.client_app_arch
+
+    properties:
+      - name: name
+        type: string
+
+      - name: type
+        type: string
+
+      - name: expression
+        type: string
+
+    relationships:
+      - name: page
+        reference_entity_name: page
+        cardinality: '1'
+        inherited: true

@@ -1,0 +1,85 @@
+entities:
+  - name: page
+    namespace: laplacian_arch.client_app_arch
+    description: |
+      A page of this application.
+    properties:
+
+      - name: name
+        type: string
+
+      - name: feature_name
+        type: string
+
+      - name: identifier
+        type: string
+        optional: true
+        default_value: |
+          name.lowerUnderscorize()
+
+      - name: path
+        type: string
+        optional: true
+        defalut_value: |
+          "${feature.basePath}/${identifier}"
+
+      - name: initial
+        description: |
+          Whether this page is the default entry point of the feature.
+        type: boolean
+        optional: true
+        default_value: |
+          false
+
+      - name: modal
+        description: |
+          Whether this page is shown in a modal window.
+        type: boolean
+        optional: true
+        default_value: |
+          false
+
+      - name: render_page_when
+        description: |
+          The condition which must be satisfied before rendering the content of this page.
+        type: string
+        optional: true
+
+    relationships:
+      - name: feature
+        description: |
+          The feature containing this page.
+        reference_entity_name: feature
+        cardinality: '1'
+        mappings:
+          - from: feature_name
+            to: name
+
+      - name: items
+        description: |
+          The list of UI items this page consists of.
+        reference_entity_name: page_item
+        cardinality: '*'
+        aggregate: true
+
+      - name: actions
+        description: |
+          The list of handlers which is called when a certain event in this page happens.
+        reference_entity_name: page_action
+        cardinality: '*'
+        aggregate: true
+
+      - name: states
+        description: |
+          A subset of the client side application state that relevant to the function of this page.
+        reference_entity_name: page_state
+        cardinality: '*'
+        aggregate: true
+
+      - name: events
+        description: |
+          The list of event which may happen in this page.
+        reference_entity_name: named_value
+        cardinality: '*'
+        aggregate: true
+

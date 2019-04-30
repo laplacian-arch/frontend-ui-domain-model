@@ -1,0 +1,65 @@
+entities:
+  - name: page_item
+    namespace: laplacian_arch.client_app_arch
+    description: |
+      A page item represents a (sometimes potentially) visible UI component in the page.
+
+    properties:
+      - name: name
+        description: 名称
+        type: string
+
+      - name: identifier
+        description: 識別子
+        type: string
+        optional: true
+        default_value: |
+          name.lowerUnderscorize()
+
+      - name: widget_group
+        type: string
+
+      - name: widget_name
+        type: string
+
+    relationships:
+      - name: page
+        description: |
+          The page this item belongs to. (It is null when this item is not a top-level item)
+        reference_entity_name: page
+        cardinality: '0..1'
+        inherited: true
+
+      - name: widget
+        reference_entity_name: widget
+        cardinality: '1'
+        mappings:
+          - from: widget_group
+            to: group
+          - from: widget_name
+            to: name
+
+      - name: widget_params
+        reference_entity_name: named_value
+        cardinality: '*'
+        aggregate: true
+
+      - name: events
+        reference_entity_name: named_value
+        cardinality: '*'
+        aggregate: true
+
+      - name: children
+        description: |
+          The list of items this item contains.
+        aggregate: true
+        cardinality: '*'
+        reference_entity_name: page_item
+
+      - name: parent
+        description: |
+          The item which contains this one. (It is null when this item is a top-level item)
+        inherited: true
+        cardinality: '0..1'
+        reference_entity_name: page_item
+
