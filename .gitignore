@@ -22,3 +22,5 @@ out/
 *.iml
 *.tmproj
 .vscode/
+# @additional_entries@
+# @additional_entries@
