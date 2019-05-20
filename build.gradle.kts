@@ -23,7 +23,7 @@ dependencies {
     model("laplacian-arch:laplacian-arch.model-def.service-api-arch:1.0.0")
     template("laplacian:laplacian.template.entity.kotlin:1.0.0")
     template("laplacian:laplacian.template.entity.json-schema:1.0.0")
-    template("laplacian:laplacian.template.entity.diagram:1.0.0")
+    template("laplacian:laplacian.template.entity.document:1.0.0")
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.2.0")

@@ -1,37 +1,33 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.ViewModelItem
-
-
 import laplacian.metamodel.model.Entity
-
 import laplacian.metamodel.record.EntityRecord
-
-
 import laplacian_arch.client_app_arch.model.Feature
-
-
 import laplacian.util.*
-
 /**
  * view_model_item
  */
 data class ViewModelItemRecord (
     private val __record: Record,
     private val _context: Context,
-
     /**
      * the feature which aggregates this view_model_item
      */
     override val feature: Feature? = null,
-
     /**
      * the parent which aggregates this view_model_item
      */
     override val parent: ViewModelItem? = null,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): ViewModelItem, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The name of this view_model_item.
@@ -82,7 +78,6 @@ data class ViewModelItemRecord (
      */
     override val defaultValue: String? by _record
 
-
     /**
      * The entity which is used as the type of this item. (This can be null if this item has a simple-type.)
 
@@ -92,13 +87,11 @@ data class ViewModelItemRecord (
             it.name == entityName
         }
 
-
     /**
      * children
      */
     override val children: List<ViewModelItem>
-        = ViewModelItemRecord.from(getList("children", emptyList()), _context, this)
-
+        = ViewModelItemRecord.from(_record.getList("children", emptyList()), _context, this)
 
     companion object {
         /**

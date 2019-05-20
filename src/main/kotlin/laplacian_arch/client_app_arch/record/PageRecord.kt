@@ -1,29 +1,15 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.Page
-
 import laplacian_arch.client_app_arch.model.PageList
-
-
 import laplacian_arch.client_app_arch.model.Feature
-
-
 import laplacian_arch.client_app_arch.model.PageItem
-
-
 import laplacian_arch.client_app_arch.model.PageAction
-
-
 import laplacian_arch.client_app_arch.model.PageState
-
-
 import laplacian.metamodel.model.NamedValue
-
 import laplacian.metamodel.record.NamedValueRecord
-
-
 import laplacian.util.*
-
 /**
  * A page of this application.
 
@@ -31,9 +17,14 @@ import laplacian.util.*
 data class PageRecord (
     private val __record: Record,
     private val _context: Context,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): Page, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The name of this page.
@@ -84,7 +75,6 @@ data class PageRecord (
      */
     override val renderPageWhen: String? by _record
 
-
     /**
      * The feature containing this page.
 
@@ -105,28 +95,28 @@ data class PageRecord (
 
      */
     override val items: List<PageItem>
-        = PageItemRecord.from(getList("items", emptyList()), _context, this)
+        = PageItemRecord.from(_record.getList("items", emptyList()), _context, this)
 
     /**
      * The list of handlers which is called when a certain event in this page happens.
 
      */
     override val actions: List<PageAction>
-        = PageActionRecord.from(getList("actions", emptyList()), _context, this)
+        = PageActionRecord.from(_record.getList("actions", emptyList()), _context, this)
 
     /**
      * A subset of the client side application state that relevant to the function of this page.
 
      */
     override val states: List<PageState>
-        = PageStateRecord.from(getList("states", emptyList()), _context, this)
+        = PageStateRecord.from(_record.getList("states", emptyList()), _context, this)
 
     /**
      * The list of event which may happen in this page.
 
      */
     override val events: List<NamedValue>
-        = NamedValueRecord.from(getList("events", emptyList()), _context)
+        = NamedValueRecord.from(_record.getList("events", emptyList()), _context)
 
     companion object {
         /**

@@ -1,40 +1,35 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.ServiceDependency
-
-
 import laplacian_arch.client_app_arch.model.Client
-
-
 import laplacian_arch.service_api_arch.model.Service
-
 import laplacian_arch.service_api_arch.record.ServiceRecord
-
-
 import laplacian.util.*
-
 /**
  * service_dependency
  */
 data class ServiceDependencyRecord (
     private val __record: Record,
     private val _context: Context,
-
     /**
      * the client which aggregates this service_dependency
      */
     override val client: Client,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): ServiceDependency, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The service_name of this service_dependency.
      */
     override val serviceName: String
         get() = getOrThrow("serviceName")
-
-
 
     /**
      * service

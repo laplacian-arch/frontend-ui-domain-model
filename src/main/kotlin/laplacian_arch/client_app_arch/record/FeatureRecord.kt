@@ -1,26 +1,14 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.Feature
-
 import laplacian_arch.client_app_arch.model.FeatureList
-
-
 import laplacian_arch.client_app_arch.model.Page
-
-
 import laplacian_arch.client_app_arch.model.ViewModelItem
-
-
 import laplacian_arch.client_app_arch.model.ViewModelOperation
-
-
 import laplacian.metamodel.model.Entity
-
 import laplacian.metamodel.record.EntityRecord
-
-
 import laplacian.util.*
-
 /**
  * A feature of this application client.
 
@@ -28,9 +16,14 @@ import laplacian.util.*
 data class FeatureRecord (
     private val __record: Record,
     private val _context: Context,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): Feature, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The name of this feature.
@@ -63,7 +56,6 @@ data class FeatureRecord (
             false
         }
 
-
     /**
      * The list of pages the feature contains.
 
@@ -78,22 +70,21 @@ data class FeatureRecord (
 
      */
     override val state: List<ViewModelItem>
-        = ViewModelItemRecord.from(getList("state", emptyList()), _context, this)
+        = ViewModelItemRecord.from(_record.getList("state", emptyList()), _context, this)
 
     /**
      * The queries to the client side application state.
 
      */
     override val stateQueries: List<ViewModelOperation>
-        = ViewModelOperationRecord.from(getList("state_queries", emptyList()), _context, this)
+        = ViewModelOperationRecord.from(_record.getList("state_queries", emptyList()), _context, this)
 
     /**
      * The list of functions which mutate the current client side application state.
 
      */
     override val stateMutation: List<ViewModelOperation>
-        = ViewModelOperationRecord.from(getList("state_mutation", emptyList()), _context, this)
-
+        = ViewModelOperationRecord.from(_record.getList("state_mutation", emptyList()), _context, this)
 
     companion object {
         /**

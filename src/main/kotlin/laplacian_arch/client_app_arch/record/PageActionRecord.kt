@@ -1,27 +1,14 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.PageAction
-
-
 import laplacian_arch.client_app_arch.model.Page
-
-
 import laplacian.metamodel.model.NamedParam
-
 import laplacian.metamodel.record.NamedParamRecord
-
-
 import laplacian_arch.client_app_arch.model.RestApiCall
-
-
 import laplacian_arch.client_app_arch.model.GraphqlQueryCall
-
-
 import laplacian_arch.client_app_arch.model.PageActionExample
-
-
 import laplacian.util.*
-
 /**
  * An page action is the handler which is called when a certain event happens in this page.
 
@@ -29,14 +16,18 @@ import laplacian.util.*
 data class PageActionRecord (
     private val __record: Record,
     private val _context: Context,
-
     /**
      * the page which aggregates this page_action
      */
     override val page: Page,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): PageAction, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The name of this page_action.
@@ -60,13 +51,11 @@ data class PageActionRecord (
             "The ${name} action in ${page.name}"
         }
 
-
-
     /**
      * params
      */
     override val params: List<NamedParam>
-        = NamedParamRecord.from(getList("params", emptyList()), _context)
+        = NamedParamRecord.from(_record.getList("params", emptyList()), _context)
 
     /**
      * rest_api_call
@@ -84,7 +73,7 @@ data class PageActionRecord (
      * examples
      */
     override val examples: List<PageActionExample>
-        = PageActionExampleRecord.from(getList("examples", emptyList()), _context, this)
+        = PageActionExampleRecord.from(_record.getList("examples", emptyList()), _context, this)
 
     companion object {
         /**

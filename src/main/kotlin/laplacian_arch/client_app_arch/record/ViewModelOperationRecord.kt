@@ -1,37 +1,31 @@
 package laplacian_arch.client_app_arch.record
 import com.github.jknack.handlebars.Context
+import laplacian.gradle.task.generate.model.Project
 import laplacian_arch.client_app_arch.model.ViewModelOperation
-
-
 import laplacian_arch.client_app_arch.model.Feature
-
-
 import laplacian.metamodel.model.NamedParam
-
 import laplacian.metamodel.record.NamedParamRecord
-
-
 import laplacian.metamodel.model.Entity
-
 import laplacian.metamodel.record.EntityRecord
-
-
 import laplacian.util.*
-
 /**
  * view_model_operation
  */
 data class ViewModelOperationRecord (
     private val __record: Record,
     private val _context: Context,
-
     /**
      * the feature which aggregates this view_model_operation
      */
     override val feature: Feature,
-
     private val _record: Record = __record.normalizeCamelcase()
 ): ViewModelOperation, Record by _record {
+    /**
+     * The laplacian module project definition.
+     */
+    private val project: Project
+        get() = _context.get("project") as Project
+
 
     /**
      * The name of this view_model_operation.
@@ -71,13 +65,11 @@ data class ViewModelOperationRecord (
     override val snippet: String
         get() = getOrThrow("snippet")
 
-
-
     /**
      * params
      */
     override val params: List<NamedParam>
-        = NamedParamRecord.from(getList("params", emptyList()), _context)
+        = NamedParamRecord.from(_record.getList("params", emptyList()), _context)
 
     /**
      * entity
